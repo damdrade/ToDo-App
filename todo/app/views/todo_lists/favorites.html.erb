@@ -1,0 +1,78 @@
+<% if user_signed_in? %>
+
+	<% color = "cyan" %>
+
+	<h1>Favoritos</h1>
+
+    <h2>Minhas Listas</h2>
+
+    <table class="table">
+        <tbody>
+            <% @todo_lists.each do |todo_list| %>
+            	<% if @ids.include? todo_list.id %>
+	                <% if todo_list.completed %>
+	                    <tr class="table-secondary">
+	                        <td class="striker"><%= link_to todo_list.description, edit_todo_list_path(todo_list) %></td>
+	                        <td><%= link_to 'Delete', todo_list, class: "btn btn-outline-danger btn-sm", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	                        <% if @ids.include? todo_list.id %>
+	                            <td><%= link_to favorite_todo_list_path(id: todo_list, type: "unfavorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[1] %></i><% end %></td>
+	                        <% else %>
+	                            <td><%= link_to favorite_todo_list_path(id: todo_list, type: "favorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[0] %></i><% end %></td>
+	                        <% end %>
+	                    </tr>
+	                <% else %>
+	                    <tr>
+	                        <td><%= link_to todo_list.description, edit_todo_list_path(todo_list) %></td>
+	                        <td><%= link_to 'Delete', todo_list, class: "btn btn-outline-danger btn-sm", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	                        <% if @ids.include? todo_list.id %>
+	                            <td><%= link_to favorite_todo_list_path(id: todo_list, type: "unfavorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[1] %></i><% end %></td>
+	                        <% else %>
+	                            <td><%= link_to favorite_todo_list_path(id: todo_list, type: "favorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[0] %></i><% end %></td>
+	                        <% end %>
+	                    </tr>
+	                <% end %>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+
+    <%= link_to 'Nova lista', new_todo_list_path %> |
+    <%= link_to 'Excluir listas concluídas', delete_delete_marked_path, data: { confirm: 'Tem certeza?' } %> |
+    <%= link_to 'Excluir todas as listas', delete_delete_all_path, data: { confirm: 'Tem certeza?' } %>
+    <br>
+    <br>
+    <br>
+
+    <h2>Listas Públicas</h2>
+
+    <table class="table table-bordered">
+        <tbody>
+            <% @others_lists.each do |others_list| %>
+            	<% if @ids.include? others_list.id %>
+	                <% if others_list.completed %>
+	                    <tr class="table-secondary">
+	                        <td class="striker"><%= link_to others_list.description, edit_todo_list_path(others_list) %></td>
+	                        <% if @ids.include? others_list.id %>
+	                            <td><%= link_to favorite_todo_list_path(id: others_list, type: "unfavorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[1] %></i><% end %></td>
+	                        <% else %>
+	                            <td><%= link_to favorite_todo_list_path(id: others_list, type: "favorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[0] %></i><% end %></td>
+	                        <% end %>
+	                    </tr>
+	                <% else %>
+	                    <tr>
+	                        <td><%= link_to others_list.description, todo_list_path(others_list) %></td>
+	                        <% if @ids.include? others_list.id %>
+	                            <td><%= link_to favorite_todo_list_path(id: others_list, type: "unfavorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[1] %></i><% end %></td>
+	                        <% else %>
+	                            <td><%= link_to favorite_todo_list_path(id: others_list, type: "favorite"), method: :put do %><i class="material-icons <%= color %> md-36" ><%= @types[0] %></i><% end %></td>
+	                        <% end %>
+	                    </tr>
+	                <% end %>
+	            <% end %>
+            <% end %>
+        </tbody>
+    </table>
+
+<% else %>
+    <%= render "layouts/static_page" %>
+<% end %>
